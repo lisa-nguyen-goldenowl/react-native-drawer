@@ -26,7 +26,7 @@ export default class Drawer extends Component {
 
   static tweenPresets = {
     parallax: (ratio, side = 'left') => {
-      let drawer = { [side] : -150 * (1 - ratio)}
+      let drawer = { [side]: -150 * (1 - ratio) }
       return { drawer }
     }
   };
@@ -98,8 +98,8 @@ export default class Drawer extends Component {
 
     styles: {},
     elevation: 0,
-    onOpen: () => {},
-    onClose: () => {},
+    onOpen: () => { },
+    onClose: () => { },
     side: 'left',
 
     useInteractionManager: false,
@@ -117,7 +117,7 @@ export default class Drawer extends Component {
     this._childDrawer = drawer
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     if (this.context.drawer) this.context.drawer._registerChildDrawer(this)
     if (this.props.openDrawerThreshold && process.env.NODE_ENV !== 'production') console.error('react-native-drawer: openDrawerThreshold is obsolete. Use panThreshold instead.')
     if (this.props.panStartCompensation && process.env.NODE_ENV !== 'production') console.error('react-native-drawer: panStartCompensation is deprecated.')
@@ -125,7 +125,7 @@ export default class Drawer extends Component {
     this.initialize(this.props)
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (this.requiresResync(nextProps)) this.resync(null, nextProps)
 
     if (nextProps.open !== null && this._open !== nextProps.open) {
@@ -159,12 +159,12 @@ export default class Drawer extends Component {
     styles.main = Object.assign({
       position: 'absolute',
       borderWidth: 0,
-    }, this.isLeftOrRightSide() ? {top: 0} : {left: 0}, this.props.styles.main)
+    }, this.isLeftOrRightSide() ? { top: 0 } : { left: 0 }, this.props.styles.main)
 
     styles.drawer = Object.assign({
       position: 'absolute',
-      borderWidth:0,
-    }, this.isLeftOrRightSide() ? {top: 0} : {left: 0}, this.props.styles.drawer)
+      borderWidth: 0,
+    }, this.isLeftOrRightSide() ? { top: 0 } : { left: 0 }, this.props.styles.drawer)
 
     if (props.initializeOpen || props.open) { // open
       this._open = true
@@ -183,8 +183,8 @@ export default class Drawer extends Component {
     }
 
     if (this.main) {
-      this.drawer.setNativeProps({ style: {left: styles.drawer.left}})
-      this.main.setNativeProps({ style: {left: styles.main.left}})
+      this.drawer.setNativeProps({ style: { left: styles.drawer.left } })
+      this.main.setNativeProps({ style: { left: styles.main.left } })
     } else {
       this.stylesheet = StyleSheet.create(styles)
       this.responder = PanResponder.create({
@@ -194,7 +194,7 @@ export default class Drawer extends Component {
         onMoveShouldSetPanResponderCapture: this.onMoveShouldSetPanResponderCapture,
         onPanResponderMove: this.onPanResponderMove,
         onPanResponderRelease: this.onPanResponderRelease,
-	onPanResponderTerminate: this.onPanResponderTerminate
+        onPanResponderTerminate: this.onPanResponderTerminate
       })
     }
 
@@ -231,10 +231,10 @@ export default class Drawer extends Component {
       drawerOverlayProps = propsFrag.drawerOverlay
     }
     if (this.main && this.drawer && this.mainOverlay && this.drawerOverlay) {
-      this.drawer.setNativeProps({style: drawerProps})
-      this.main.setNativeProps({style: mainProps})
-      if (mainOverlayProps) this.mainOverlay.setNativeProps({style: mainOverlayProps})
-      if (drawerOverlayProps) this.drawerOverlay.setNativeProps({style: drawerOverlayProps})
+      this.drawer.setNativeProps({ style: drawerProps })
+      this.main.setNativeProps({ style: mainProps })
+      if (mainOverlayProps) this.mainOverlay.setNativeProps({ style: mainOverlayProps })
+      if (drawerOverlayProps) this.drawerOverlay.setNativeProps({ style: drawerOverlayProps })
     }
   };
 
@@ -280,7 +280,7 @@ export default class Drawer extends Component {
     let length = this._prevLength + delta
     length = Math.min(length, this.getOpenLength())
     length = Math.max(length, this.getClosedLength())
-    length = Math.round(length*2)/2
+    length = Math.round(length * 2) / 2
     this._length = length
 
     this.updatePosition()
@@ -316,7 +316,7 @@ export default class Drawer extends Component {
 
   processMoveShouldSet = (e, gestureState) => {
     let inMask = this.testPanResponderMask(e, gestureState)
-    if (!inMask && (!this.props.acceptPanOnDrawer || this._open === false )) return false
+    if (!inMask && (!this.props.acceptPanOnDrawer || this._open === false)) return false
     if (!this.props.acceptPan) return false
 
     if (!this.props.negotiatePan || this.props.disabled || !this.props.acceptPan || this._panning) return false
@@ -371,8 +371,8 @@ export default class Drawer extends Component {
     let deltaOpen = this.isLeftOrTopSide() ? this.getDeviceLength() - pos0 : pos0
     let deltaClose = this.isLeftOrTopSide() ? pos0 : this.getDeviceLength() - pos0
 
-    if ( this._open && deltaOpen > this.getOpenMask() ) return false
-    if ( !this._open && deltaClose > this.getClosedMask() ) return false
+    if (this._open && deltaOpen > this.getOpenMask()) return false
+    if (!this._open && deltaClose > this.getClosedMask()) return false
     return true
   };
 
@@ -398,7 +398,7 @@ export default class Drawer extends Component {
       duration: this.props.tweenDuration,
       easingType: this.props.tweenEasing,
       onFrame: (tweenValue) => {
-	this._length = Math.round(tweenValue*2)/2;
+        this._length = Math.round(tweenValue * 2) / 2;
         this.updatePosition()
       },
       onEnd: () => {
@@ -409,7 +409,7 @@ export default class Drawer extends Component {
         this.props.onOpen()
         this.clearInteractionHandle()
 
-        if(typeof type === 'function') {
+        if (typeof type === 'function') {
           type() // this is actually a callback
         } else cb && cb()
 
@@ -432,7 +432,7 @@ export default class Drawer extends Component {
       easingType: this.props.tweenEasing,
       duration: this.props.tweenDuration,
       onFrame: (tweenValue) => {
-	this._length = Math.round(tweenValue*2)/2;
+        this._length = Math.round(tweenValue * 2) / 2;
         this.updatePosition()
       },
       onEnd: () => {
@@ -443,7 +443,7 @@ export default class Drawer extends Component {
         this.props.onClose()
         this.clearInteractionHandle()
 
-        if(typeof type === 'function') {
+        if (typeof type === 'function') {
           type() // this is actually a callback
         } else cb && cb()
 
@@ -567,7 +567,7 @@ export default class Drawer extends Component {
         key="drawerContainer"
         onLayout={this.handleSetViewport}
         style={this.stylesheet.container}
-        >
+      >
         {first}
         {second}
       </View>
@@ -580,14 +580,14 @@ export default class Drawer extends Component {
         {...this.responder.panHandlers}
         key="main"
         ref={c => this.main = c}
-        style={[this.stylesheet.main, {height: this.getMainHeight(), width: this.getMainWidth()}]}
-        >
+        style={[this.stylesheet.main, { height: this.getMainHeight(), width: this.getMainWidth() }]}
+      >
         {this.props.children}
         <View
-          pointerEvents={ this._open && this.shouldCaptureGestures() ? 'auto' : 'none' }
+          pointerEvents={this._open && this.shouldCaptureGestures() ? 'auto' : 'none'}
           ref={c => this.mainOverlay = c}
           style={[styles.overlay, this.props.styles && this.props.styles.mainOverlay]}
-          />
+        />
       </View>
     )
   }
@@ -599,14 +599,14 @@ export default class Drawer extends Component {
         key="drawer"
         ref={c => this.drawer = c}
         elevation={this.props.elevation}
-        style={[this.stylesheet.drawer, {height: this.getDrawerHeight(), width: this.getDrawerWidth()}]}
-        >
+        style={[this.stylesheet.drawer, { height: this.getDrawerHeight(), width: this.getDrawerWidth() }]}
+      >
         {this.props.content}
         <View
-          pointerEvents={ !this._open && this.shouldCaptureGestures() ? 'auto' : 'none' }
+          pointerEvents={!this._open && this.shouldCaptureGestures() ? 'auto' : 'none'}
           ref={c => this.drawerOverlay = c}
           style={[styles.overlay, this.props.styles && this.props.styles.drawerOverlay]}
-          />
+        />
       </View>
     )
   }
